@@ -6,24 +6,20 @@ using UnityEngine;
 
 namespace Controllers
 {
-    public class HookPhysicController : MonoBehaviour
+    public class HoopPhysicController : MonoBehaviour
     {
         #region Self Variables
 
         #region Serialized Variables
 
-        [SerializeField] private HookManager manager;
+        [SerializeField] private HoopManager manager;
 
         #endregion
 
         #region Private Variables
 
-        private bool _isPassedPlayer;
-        private bool _isEnterPlayer;
-
         #endregion
 
         #endregion
-        
     }
 }

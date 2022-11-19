@@ -4,6 +4,7 @@ using Enums;
 using Signals;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Managers
 {
@@ -13,14 +14,15 @@ namespace Managers
 
         #region Serialized Variables
         [SerializeField] private List<GameObject> panels;
+        [SerializeField] private Text scoreText;
 
         #endregion
 
         #region Private Variables
         
         private UIPanelController _uiPanelController;
-        
-       #endregion
+
+        #endregion
 
         #endregion
 
@@ -46,6 +48,7 @@ namespace Managers
             CoreGameSignals.Instance.onPlay += OnPlay;
             UISignals.Instance.onOpenPanel += OnOpenPanel;
             UISignals.Instance.onClosePanel += OnClosePanel;
+            UISignals.Instance.onSetScoreText += OnSetScoreText;
         }
 
         private void UnsubscribeEvents()
@@ -53,6 +56,7 @@ namespace Managers
             CoreGameSignals.Instance.onPlay -= OnPlay;
             UISignals.Instance.onOpenPanel -= OnOpenPanel;
             UISignals.Instance.onClosePanel -= OnClosePanel;
+            UISignals.Instance.onSetScoreText -= OnSetScoreText;
         }
 
         private void OnDisable()
@@ -71,13 +75,7 @@ namespace Managers
         {
             _uiPanelController.ClosePanel(panelParam , panels);
         }
-        
-        private void OnSetScoreText(int value)
-        {
-            // scoreTMP.text = (value.ToString());
-            // idleScoreText.text = (value.ToString());
-        }
-        
+
         private void OnPlay()
         {
             UISignals.Instance.onClosePanel?.Invoke(UIPanels.StartPanel);
@@ -99,6 +97,11 @@ namespace Managers
         {
             CoreGameSignals.Instance.onPlay?.Invoke();
             OnPlay();
+        }
+
+        private void OnSetScoreText(ushort score)
+        {
+            scoreText.text = score.ToString();
         }
     }
 }

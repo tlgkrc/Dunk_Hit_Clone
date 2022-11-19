@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Managers
 {
-    public class HookManager : MonoBehaviour
+    public class HoopOrderManager : MonoBehaviour
     {
         #region Self Variables
 
@@ -54,8 +54,10 @@ namespace Managers
         
         private void OnSetDefaultSettings()
         {
-            leftHook.SetActive(true);
             rightHook.SetActive(false);
+            float newPosY = Random.Range(-2, 2);
+            leftHook.transform.DOMoveY(newPosY, .1f).OnComplete(
+                () => leftHook.transform.DOMoveX(leftHook.transform.position.x + 1.5f, 1f).SetEase(Ease.InExpo));
             _isLeftSideActive = true;
         }
         
@@ -68,10 +70,12 @@ namespace Managers
         {
             if (_isLeftSideActive)
             {
-                leftHook.transform.DOMoveX(leftHook.transform.position.x - 1.5f, 1f).SetEase(Ease.InExpo).OnComplete(()=>
-                    leftHook.SetActive(false));
+                leftHook.transform.DOMoveX(leftHook.transform.position.x - 1.5f, 1f).SetEase(Ease.InExpo).OnComplete(
+                    ()=> leftHook.SetActive(false));
                 rightHook.SetActive(true);
-                rightHook.transform.DOMoveX(rightHook.transform.position.x - 1.5f, 1f).SetEase(Ease.InExpo);
+                float newPosY = Random.Range(-2, 2);
+                rightHook.transform.DOMoveY(newPosY, .1f).OnComplete(
+                    ()=>rightHook.transform.DOMoveX(rightHook.transform.position.x - 1.5f, 1f).SetEase(Ease.InExpo));
                 _isLeftSideActive = false;
             }
             else
@@ -79,7 +83,9 @@ namespace Managers
                 rightHook.transform.DOMoveX(rightHook.transform.position.x + 1.5f, 1f).SetEase(Ease.InExpo).OnComplete(()=>
                     rightHook.SetActive(false));
                 leftHook.SetActive(true);
-                leftHook.transform.DOMoveX(leftHook.transform.position.x + 1.5f, 1f).SetEase(Ease.InExpo);
+                float newPosY = Random.Range(-2, 2);
+                leftHook.transform.DOMoveY(newPosY, .1f).OnComplete(
+                    () => leftHook.transform.DOMoveX(leftHook.transform.position.x + 1.5f, 1f).SetEase(Ease.InExpo));
                 _isLeftSideActive = true;
             }
         }

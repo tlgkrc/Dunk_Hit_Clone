@@ -71,18 +71,18 @@ namespace Controllers.Player
             }
         }
 
-        public void ReturnLoopPos()
+        public void ReturnLoopPos(bool isLeft)
         {
             var pos = transform.position;
-            if (_isMoveRightSide)
+            if (isLeft)
             {
                 
-                rigidbody.transform.position = new Vector3(pos.x - _playerData.LoopDistance,
+                rigidbody.transform.position = new Vector3(pos.x + _playerData.LoopDistance,
                     pos.y, pos.z);
             }
             else
             {
-                rigidbody.transform.position = new Vector3(pos.x + _playerData.LoopDistance,
+                rigidbody.transform.position = new Vector3(pos.x - _playerData.LoopDistance,
                     pos.y, pos.z);
             }
         }

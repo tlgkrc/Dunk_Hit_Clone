@@ -1,5 +1,5 @@
-﻿using Extentions;
-using UnityEngine;
+﻿using System;
+using Extentions;
 using UnityEngine.Events;
 
 namespace Signals
@@ -8,5 +8,8 @@ namespace Signals
     {
         public UnityAction onPlay = delegate {  };
         public UnityAction onReset = delegate {  };
+        public UnityAction<bool> onInteractionWithBorder = delegate{  };
+        public UnityAction<bool> onInteractionWithHookEntry = delegate {  };
+        public Func<bool> onHasImpact = delegate { return false;};
     }
 }

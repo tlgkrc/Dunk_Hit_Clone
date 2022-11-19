@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Signals;
+using UnityEngine;
 
 namespace Managers
 {
@@ -13,18 +14,12 @@ namespace Managers
 
         #region Private Variables
 
-
-
-        #endregion
+        private ushort _score;
 
         #endregion
 
-        private void Awake()
-        {
+        #endregion
 
-        }
-
-        
         #region Event Subscriptions
 
         private void OnEnable()
@@ -34,12 +29,12 @@ namespace Managers
 
         private void SubscribeEvents()
         {
-            
+            ScoreSignals.Instance.onUpdateScore += OnUpdateScore;
         }
 
         private void UnsubscribeEvents()
         {
-            
+            ScoreSignals.Instance.onUpdateScore -= OnUpdateScore;
         }
 
         private void OnDisable()
@@ -48,6 +43,20 @@ namespace Managers
         }
 
         #endregion
-        
+
+        private void OnUpdateScore()
+        {
+            bool isPerfect = (bool)CoreGameSignals.Instance.onHasImpact?.Invoke();
+            if (isPerfect)
+            {
+                _score += 2;
+                Debug.Log("Implement boost effect");
+            }
+            else
+            {
+                _score += 1;
+            }
+            UISignals.Instance.onSetScoreText?.Invoke(_score);
+        }
     }
 }

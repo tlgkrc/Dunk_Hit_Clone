@@ -21,19 +21,8 @@ namespace Controllers.Player
         #endregion
 
         #endregion
-        private void OnTriggerEnter(Collider other)
-        {
-            if (other.CompareTag("Hook"))
-            {
-                _isEnterPlayer = true;
-            }
-            else if (other.CompareTag("Border"))
-            {
-                manager.SetLoopPos();
-            }
-        }
 
-        private void OnTriggerStay(Collider other)
+        private void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag("Hook") && _isEnterPlayer)
             {
@@ -42,12 +31,9 @@ namespace Controllers.Player
             }
         }
 
-        private void OnTriggerExit(Collider other)
+        public void SetEntrySituation(bool isInEntry)
         {
-            if (other.CompareTag("Hook"))
-            {
-                _isEnterPlayer = false;
-            }
+            _isEnterPlayer = isInEntry;
         }
     }
 }

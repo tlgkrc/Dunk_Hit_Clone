@@ -47,6 +47,8 @@ namespace Managers
             CoreGameSignals.Instance.onPlay += OnPlay;
             CoreGameSignals.Instance.onReset += OnReset;
             ScoreSignals.Instance.onUpdateScore += OnChangeMoveDirection;
+            CoreGameSignals.Instance.onInteractionWithBorder += OnInteractionWithBorder;
+            CoreGameSignals.Instance.onInteractionWithHookEntry += OnInteractionWithEntry;
         }
 
         private void UnsubscribeEvents()
@@ -56,7 +58,8 @@ namespace Managers
             CoreGameSignals.Instance.onPlay -= OnPlay;
             CoreGameSignals.Instance.onReset -= OnReset;
             ScoreSignals.Instance.onUpdateScore -= OnChangeMoveDirection;
-
+            CoreGameSignals.Instance.onInteractionWithBorder -= OnInteractionWithBorder;
+            CoreGameSignals.Instance.onInteractionWithHookEntry -= OnInteractionWithEntry;
         }
 
         private void OnDisable()
@@ -101,9 +104,14 @@ namespace Managers
             movementController.SetMoveDirection();
         }
 
-        public void SetLoopPos()
+        private void OnInteractionWithBorder(bool isLeft)
         {
-            movementController.ReturnLoopPos();
+            movementController.ReturnLoopPos(isLeft);
+        }
+
+        private void OnInteractionWithEntry(bool isInEntry)
+        {
+            physicsController.SetEntrySituation(isInEntry);
         }
 
         // private void ParticuleState(bool active, Transform instantiateTransform = null)
