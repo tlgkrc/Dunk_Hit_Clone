@@ -8,5 +8,6 @@ namespace Signals
     public class ScoreSignals : MonoSingleton<ScoreSignals>
     {
         public UnityAction onUpdateScore = delegate {  };
+        public UnityAction<Vector3> onGetHookPos = delegate{  };
     }
 }

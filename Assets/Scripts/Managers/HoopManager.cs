@@ -18,6 +18,12 @@ namespace Managers
 
         #endregion
 
+        #region Private Variables
+
+        private bool _isPerfect;
+
+        #endregion
+
         #endregion
 
         #region Event Supscriptions
@@ -30,11 +36,13 @@ namespace Managers
         private void SubscribeEvents()
         {
             CoreGameSignals.Instance.onHasImpact += OnHasImpact;
+            ScoreSignals.Instance.onUpdateScore += OnResetPerfectState;
         }
 
         private void UnsubscribeEvents()
         {
             CoreGameSignals.Instance.onHasImpact -= OnHasImpact;
+            ScoreSignals.Instance.onUpdateScore -= OnResetPerfectState;
         }
 
         private void OnDisable()
@@ -46,6 +54,7 @@ namespace Managers
 
         public void PlayImpactEffect()
         {
+            _isPerfect = false;
             hoopEntry.transform.DOLocalRotate(new Vector3(3, 0, 0), .5f);
             Invoke(nameof(StopImpactEffect),1);
         }
@@ -57,7 +66,12 @@ namespace Managers
 
         private bool OnHasImpact()
         {
-            return hoopEntry.transform.rotation.x == 0;
+            return _isPerfect;
+        }
+
+        private void OnResetPerfectState()
+        {
+            _isPerfect = true;
         }
     }
 }

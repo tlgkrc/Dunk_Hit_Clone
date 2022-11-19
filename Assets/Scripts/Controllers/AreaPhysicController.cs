@@ -1,9 +1,8 @@
-﻿using System;
-using Managers;
+﻿using Managers;
 using Signals;
 using UnityEngine;
 
-namespace Controllers.Player
+namespace Controllers
 {
     public class AreaPhysicController : MonoBehaviour
     {

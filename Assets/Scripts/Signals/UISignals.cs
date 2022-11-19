@@ -8,6 +8,6 @@ namespace Signals
     {
         public UnityAction<UIPanels> onOpenPanel = delegate { };
         public UnityAction<UIPanels> onClosePanel = delegate { };
-        public UnityAction<ushort> onSetScoreText = delegate { };
+        public UnityAction<ushort,ushort> onSetScoreText = delegate { };
     }
 }

@@ -1,4 +1,6 @@
-﻿using Signals;
+﻿using DG.Tweening;
+using Signals;
+using TMPro;
 using UnityEngine;
 
 namespace Managers
@@ -8,13 +10,16 @@ namespace Managers
         #region Self Variables
 
         #region Serialized Variables
-        
+
+        [SerializeField] private TextMeshPro greatText;
 
         #endregion
 
         #region Private Variables
 
         private ushort _score;
+        private ushort _perfectCounter;
+        private Vector3 _greatTextPos;
 
         #endregion
 
@@ -30,11 +35,15 @@ namespace Managers
         private void SubscribeEvents()
         {
             ScoreSignals.Instance.onUpdateScore += OnUpdateScore;
+            ScoreSignals.Instance.onGetHookPos += OnGetHookPosition;
+            CoreGameSignals.Instance.onPlay += OnPlay;
         }
 
         private void UnsubscribeEvents()
         {
             ScoreSignals.Instance.onUpdateScore -= OnUpdateScore;
+            ScoreSignals.Instance.onGetHookPos -= OnGetHookPosition;
+            CoreGameSignals.Instance.onPlay -= OnPlay;
         }
 
         private void OnDisable()
@@ -44,19 +53,41 @@ namespace Managers
 
         #endregion
 
+        private void OnPlay()
+        {
+            greatText.gameObject.SetActive(false);
+        }
+
         private void OnUpdateScore()
         {
             bool isPerfect = (bool)CoreGameSignals.Instance.onHasImpact?.Invoke();
             if (isPerfect)
             {
-                _score += 2;
+                _perfectCounter++;
+                greatText.gameObject.SetActive(true);
+                greatText.transform.position = _greatTextPos;
+                greatText.text = "GREAT\n+" + _perfectCounter.ToString();
+                greatText.transform.DOMoveY(greatText.transform.position.y + 3f, 1.2f).
+                    OnComplete(ResetGreatText);
                 Debug.Log("Implement boost effect");
             }
             else
             {
-                _score += 1;
+                _perfectCounter = 0;
             }
-            UISignals.Instance.onSetScoreText?.Invoke(_score);
+
+            _score += (ushort)(_perfectCounter+1);
+            UISignals.Instance.onSetScoreText?.Invoke(_score,_perfectCounter);
+        }
+
+        private void OnGetHookPosition(Vector3 hookPos)
+        {
+            _greatTextPos = hookPos;
+        }
+        
+        private void ResetGreatText()
+        {
+            greatText.gameObject.SetActive(false);
         }
     }
 }

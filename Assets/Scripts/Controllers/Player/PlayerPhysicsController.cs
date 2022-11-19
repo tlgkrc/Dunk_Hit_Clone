@@ -26,6 +26,7 @@ namespace Controllers.Player
         {
             if (other.CompareTag("Hook") && _isEnterPlayer)
             {
+                ScoreSignals.Instance.onGetHookPos.Invoke(other.transform.position);
                 ScoreSignals.Instance.onUpdateScore?.Invoke();
                 _isEnterPlayer = false;
             }

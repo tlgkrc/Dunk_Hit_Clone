@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3140190996231982721}
   - component: {fileID: 6248380683011993303}
   - component: {fileID: 565061702940696175}
+  - component: {fileID: 2695935146596561400}
   m_Layer: 0
   m_Name: basketball hoop
   m_TagString: Untagged
@@ -99,6 +100,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -2856680083260580003, guid: 00855ed006fc34c4b9495c13ad01f5b2, type: 3}
+--- !u!114 &2695935146596561400
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 565061702940696174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e85f8db39af74062a5d54c1ad4c6020e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  manager: {fileID: 5852399734307935009}
 --- !u!1 &744602208797533033
 GameObject:
   m_ObjectHideFlags: 0
@@ -274,7 +288,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1170130676508727259}
-  - component: {fileID: 6582965415415558860}
   m_Layer: 0
   m_Name: Hoop
   m_TagString: Untagged
@@ -298,19 +311,6 @@ Transform:
   m_Father: {fileID: 7983322554631923639}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6582965415415558860
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2617827385447625187}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e85f8db39af74062a5d54c1ad4c6020e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  manager: {fileID: 5852399734307935009}
 --- !u!1 &3217694304606230412
 GameObject:
   m_ObjectHideFlags: 0
@@ -765,7 +765,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   physicController: {fileID: 6134534337005103227}
-  impactController: {fileID: 6582965415415558860}
+  impactController: {fileID: 2695935146596561400}
   hoopEntry: {fileID: 2617827385447625187}
 --- !u!1 &7983322554361379908
 GameObject:
