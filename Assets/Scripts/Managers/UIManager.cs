@@ -13,17 +13,14 @@ namespace Managers
 
         #region Serialized Variables
         [SerializeField] private List<GameObject> panels;
-        [SerializeField] private TextMeshProUGUI levelText;
-        [SerializeField] private TextMeshPro scoreTMP;
-        [SerializeField] private bool isOnEditMode = false;
-        [SerializeField] private TextMeshProUGUI idleScoreText;
 
         #endregion
 
         #region Private Variables
+        
         private UIPanelController _uiPanelController;
-        private bool _isReadyForIdleGame = false;
-        #endregion
+        
+       #endregion
 
         #endregion
 
@@ -46,12 +43,16 @@ namespace Managers
 
         private void SubscribeEvents()
         {
-            
+            CoreGameSignals.Instance.onPlay += OnPlay;
+            UISignals.Instance.onOpenPanel += OnOpenPanel;
+            UISignals.Instance.onClosePanel += OnClosePanel;
         }
 
         private void UnsubscribeEvents()
         {
-            
+            CoreGameSignals.Instance.onPlay -= OnPlay;
+            UISignals.Instance.onOpenPanel -= OnOpenPanel;
+            UISignals.Instance.onClosePanel -= OnClosePanel;
         }
 
         private void OnDisable()
@@ -60,8 +61,6 @@ namespace Managers
         }
 
         #endregion
-
-        #region Event Methods
 
         private void OnOpenPanel(UIPanels panelParam)
         {
@@ -75,8 +74,8 @@ namespace Managers
         
         private void OnSetScoreText(int value)
         {
-            scoreTMP.text = (value.ToString());
-            idleScoreText.text = (value.ToString());
+            // scoreTMP.text = (value.ToString());
+            // idleScoreText.text = (value.ToString());
         }
         
         private void OnPlay()
@@ -93,18 +92,13 @@ namespace Managers
 
         private void OnSetLevelText(int value)
         {
-            levelText.text = "Level " + (value + 1);
+           // levelText.text = "Level " + (value + 1);
         }
-
-        #endregion
-
-        #region Buttons
 
         public void Play()
         {
             CoreGameSignals.Instance.onPlay?.Invoke();
+            OnPlay();
         }
-
-        #endregion
     }
 }

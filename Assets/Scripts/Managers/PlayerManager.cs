@@ -1,11 +1,7 @@
-using Commands;
 using UnityEngine;
-using Controllers;
 using Controllers.Player;
 using Data.UnityObject;
 using Data.ValueObject;
-using Enums;
-using Keys;
 using Signals;
 
 namespace Managers
@@ -22,38 +18,19 @@ namespace Managers
 
         #region Serialized Variables
 
-        [SerializeField] private PlayerAnimationController animationController;
         [SerializeField] private PlayerMeshController meshController;
+        [SerializeField] private PlayerPhysicsController physicsController;
+        [SerializeField] private PlayerMovementController movementController;
+        //[SerializeField] private PlayerParticuleController particuleController;
 
         #endregion
-
-        #region Private Variables
-
-        private Rigidbody _rb;
-        private PlayerParticuleController _particuleController;
-
-
-        #endregion
+        
         #endregion
 
         private void Awake()
         {
             GetReferences();
-            Init();
-        }
-
-        private PlayerData GetPlayerData() => Resources.Load<CD_Player>("Data/CD_Player").Data;
-        
-        private void Init()
-        {
-            var transform1 = transform;
-            _rb = GetComponent<Rigidbody>();
-            _particuleController = GetComponent<PlayerParticuleController>();
-        }
-
-        private void GetReferences()
-        {
-            Data = GetPlayerData();
+            SendDataToControllers();
         }
 
         #region Event Subscription
@@ -69,6 +46,7 @@ namespace Managers
             InputSignals.Instance.onInputReleased += OnDeactivateMovement;
             CoreGameSignals.Instance.onPlay += OnPlay;
             CoreGameSignals.Instance.onReset += OnReset;
+            ScoreSignals.Instance.onUpdateScore += OnChangeMoveDirection;
         }
 
         private void UnsubscribeEvents()
@@ -77,6 +55,8 @@ namespace Managers
             InputSignals.Instance.onInputReleased -= OnDeactivateMovement;
             CoreGameSignals.Instance.onPlay -= OnPlay;
             CoreGameSignals.Instance.onReset -= OnReset;
+            ScoreSignals.Instance.onUpdateScore -= OnChangeMoveDirection;
+
         }
 
         private void OnDisable()
@@ -85,18 +65,22 @@ namespace Managers
         }
 
         #endregion
-
-        #region Event Methods
-
-        #region Movement Controller
-
         
-        #endregion
+        private PlayerData GetPlayerData() => Resources.Load<CD_Player>("Data/CD_PlayerData").Data;
 
-        #region Others
+        private void GetReferences()
+        {
+            Data = GetPlayerData();
+        }
+
+        private void SendDataToControllers()
+        {
+            movementController.SetData(Data);
+        }
 
         private void OnPlay()
         {
+            movementController.SetMoveDirection();
         }
         private void OnReset()
         {
@@ -104,28 +88,34 @@ namespace Managers
 
         private void OnActivateMovement()
         {
-            
+            movementController.SetSuitableSituation(true);
         }
 
         private void OnDeactivateMovement()
         {
-            
+            movementController.SetSuitableSituation(true);
         }
 
-        #endregion
-
-        #endregion
-
-        private void ParticuleState(bool active, Transform instantiateTransform = null)
+        private void OnChangeMoveDirection()
         {
-            if (active)
-            {
-                _particuleController.StartParticule(instantiateTransform);
-            }
-            else
-            {
-                _particuleController.StopParticule();
-            }
+            movementController.SetMoveDirection();
         }
+
+        public void SetLoopPos()
+        {
+            movementController.ReturnLoopPos();
+        }
+
+        // private void ParticuleState(bool active, Transform instantiateTransform = null)
+        // {
+        //     if (active)
+        //     {
+        //         particuleController.StartParticule(instantiateTransform);
+        //     }
+        //     else
+        //     {
+        //         particuleController.StopParticule();
+        //     }
+        // }
     }
 }

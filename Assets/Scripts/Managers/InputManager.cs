@@ -94,10 +94,6 @@ namespace Managers
                 MouseButtonDown();
             }
             
-            if (Input.GetMouseButton(0) && !_queryPointerOverUIElementCommand.Execute())
-            {
-                HoldingMouseButton();
-            }
         }
 
         #region Event Methods
@@ -124,13 +120,6 @@ namespace Managers
             isFirstTimeTouchTaken = false;
         }
 
-        private void OnNextLevel() 
-        {
-            _isTouching = false;
-            isReadyForTouch = false;
-            isFirstTimeTouchTaken = false;
-        }
-
         #endregion
         
         #region InputUpdateMethods
@@ -151,29 +140,6 @@ namespace Managers
                 InputSignals.Instance.onFirstTimeTouchTaken?.Invoke();
             }
             _mousePosition = Input.mousePosition;
-        }
-
-        private void HoldingMouseButton()
-        {
-            if (!_isTouching) return;
-            if (_mousePosition == null) return;
-            Vector2 mouseDeltaPos = (Vector2) Input.mousePosition - _mousePosition.Value;
-                    
-            if (mouseDeltaPos.x > Data.HorizontalInputSpeed)
-                _moveVector.x = Data.HorizontalInputSpeed / 10f * mouseDeltaPos.x;
-            else if (mouseDeltaPos.x < -Data.HorizontalInputSpeed)
-                _moveVector.x = -Data.HorizontalInputSpeed / 10f * -mouseDeltaPos.x;
-            else
-                _moveVector.x = Mathf.SmoothDamp(_moveVector.x, 0f, ref _currentVelocity,
-                    Data.ClampSpeed);
-                         
-            _mousePosition = Input.mousePosition;
-                         
-            // InputSignals.Instance.onRunnerInputDragged?.Invoke(new RunnerInputParams()
-            // {
-            //     XValue = _moveVector.x,
-            //     ClampValues = new Vector2(Data.ClampSides.x, Data.ClampSides.y)
-            // });
         }
 
         #endregion

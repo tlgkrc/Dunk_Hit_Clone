@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: dafbbe1f3dadca54abc20684afe08503
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Super Bowl
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 612f7ad76666964429e6403b963e57d4, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,13 +1,8 @@
-using System;
-using System.Collections;
+using Managers;
 using Signals;
 using UnityEngine;
-using Managers;
-using Enums;
-using UnityEditor.VersionControl;
-using Task = System.Threading.Tasks.Task;
 
-namespace Controllers
+namespace Controllers.Player
 {
     public class PlayerPhysicsController : MonoBehaviour
     {
@@ -16,16 +11,43 @@ namespace Controllers
         #region Serialized Variables
 
         [SerializeField] private PlayerManager manager;
-        [SerializeField] private ParticleSystem particle;
-        [SerializeField] private ParticleSystem currentParticle;
+
+        #endregion
+
+        #region Private Variables
+
+        private bool _isEnterPlayer;
 
         #endregion
 
         #endregion
-
         private void OnTriggerEnter(Collider other)
         {
-           
+            if (other.CompareTag("Hook"))
+            {
+                _isEnterPlayer = true;
+            }
+            else if (other.CompareTag("Border"))
+            {
+                manager.SetLoopPos();
+            }
+        }
+
+        private void OnTriggerStay(Collider other)
+        {
+            if (other.CompareTag("Hook") && _isEnterPlayer)
+            {
+                ScoreSignals.Instance.onUpdateScore?.Invoke();
+                _isEnterPlayer = false;
+            }
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.CompareTag("Hook"))
+            {
+                _isEnterPlayer = false;
+            }
         }
     }
 }

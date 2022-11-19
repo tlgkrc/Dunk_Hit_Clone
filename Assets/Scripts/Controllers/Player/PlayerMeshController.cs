@@ -8,7 +8,6 @@ namespace Controllers.Player
 
         #region Serialized Variables
 
-        [SerializeField] private SkinnedMeshRenderer skinnedMeshRenderer;
 
         #endregion
         #region Private Variables
