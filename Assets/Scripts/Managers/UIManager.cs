@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Controllers;
+using Controllers.UI;
 using DG.Tweening;
 using Enums;
 using Signals;
@@ -47,6 +48,7 @@ namespace Managers
         private void SubscribeEvents()
         {
             CoreGameSignals.Instance.onPlay += OnPlay;
+            CoreGameSignals.Instance.onReset += OnReset;
             CoreGameSignals.Instance.onGameFailed += OnGameFailed;
             UISignals.Instance.onOpenPanel += OnOpenPanel;
             UISignals.Instance.onClosePanel += OnClosePanel;
@@ -57,6 +59,7 @@ namespace Managers
         private void UnsubscribeEvents()
         {
             CoreGameSignals.Instance.onPlay -= OnPlay;
+            CoreGameSignals.Instance.onReset -= OnReset;
             CoreGameSignals.Instance.onGameFailed -= OnGameFailed;
             UISignals.Instance.onOpenPanel -= OnOpenPanel;
             UISignals.Instance.onClosePanel -= OnClosePanel;
@@ -101,10 +104,9 @@ namespace Managers
             CoreGameSignals.Instance.onPlay?.Invoke();
         }
 
-        private void OnSetScoreText(ushort score,ushort increaseFactor)
+        private void OnSetScoreText(ushort score,ushort increaseFactor,bool isPerfect)
         {
             timeController.ResetTime();
-            var isPerfect = CoreGameSignals.Instance.onHasImpact?.Invoke();
             scoreText.transform.DOScale(Vector3.one * 1.3f, .3f).SetEase(Ease.InOutElastic).OnComplete(
                 () => scoreText.transform.DOScale(Vector3.one, .3f));
             scoreText.text = score.ToString();
@@ -112,8 +114,8 @@ namespace Managers
             increaseText.text = "+" + (increaseFactor+1).ToString();
             increaseText.transform.DOLocalMoveY(increaseText.transform.localPosition.y+140f, 1f).
                 OnComplete(ResetIncreaseText);
-            
-            if (isPerfect == true)
+
+            if (isPerfect )
             {
                 perfectText.gameObject.SetActive(true);
                 perfectText.text = "Perfect x" + increaseFactor.ToString();
@@ -134,5 +136,17 @@ namespace Managers
         {
             bestScore.text = "BEST " + best.ToString();
         }
+
+        private void OnReset()
+        {
+            UISignals.Instance.onOpenPanel?.Invoke(UIPanels.StartPanel);
+            UISignals.Instance.onClosePanel?.Invoke(UIPanels.FailPanel);
+        }
+
+        public void TryAgain()
+        {
+            CoreGameSignals.Instance.onReset?.Invoke();
+        }
+        
     }
 }

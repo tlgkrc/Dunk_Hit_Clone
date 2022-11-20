@@ -17,14 +17,15 @@ namespace Controllers.Player
         #region Private Variables
 
         private bool _isEnterPlayer;
+        private bool _isExitPlayer;
 
         #endregion
 
         #endregion
-
-        private void OnTriggerEnter(Collider other)
+        
+        private void OnTriggerExit(Collider other)
         {
-            if (other.CompareTag("Hook") && _isEnterPlayer)
+            if (other.CompareTag("Hook") && _isEnterPlayer && _isExitPlayer)
             {
                 ScoreSignals.Instance.onGetHookPos.Invoke(other.transform.position);
                 ScoreSignals.Instance.onUpdateScore?.Invoke();
@@ -35,6 +36,11 @@ namespace Controllers.Player
         public void SetEntrySituation(bool isInEntry)
         {
             _isEnterPlayer = isInEntry;
+        }
+
+        public void SetExitSituation(bool isInExit)
+        {
+            _isExitPlayer = isInExit;
         }
     }
 }

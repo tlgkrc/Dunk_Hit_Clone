@@ -1,5 +1,6 @@
 ﻿using System;
 using Controllers;
+using Controllers.Hoop;
 using DG.Tweening;
 using Signals;
 using UnityEngine;
@@ -15,6 +16,7 @@ namespace Managers
         [SerializeField] private GameObject hoopEntry;
         [SerializeField] private HoopPhysicController physicController;
         [SerializeField] private HoopImpactController impactController;
+        [SerializeField] private HoopEntryController entryController;
         
         #endregion
 
@@ -35,13 +37,11 @@ namespace Managers
 
         private void SubscribeEvents()
         {
-            CoreGameSignals.Instance.onHasImpact += OnHasImpact;
             ScoreSignals.Instance.onUpdateScore += OnResetPerfectState;
         }
 
         private void UnsubscribeEvents()
         {
-            CoreGameSignals.Instance.onHasImpact -= OnHasImpact;
             ScoreSignals.Instance.onUpdateScore -= OnResetPerfectState;
         }
 
@@ -54,7 +54,6 @@ namespace Managers
 
         public void PlayImpactEffect()
         {
-            _isPerfect = false;
             hoopEntry.transform.DOLocalRotate(new Vector3(3, 0, 0), .5f);
             Invoke(nameof(StopImpactEffect),1);
         }
@@ -64,14 +63,9 @@ namespace Managers
             hoopEntry.transform.DOLocalRotate(Vector3.zero, .5f);
         }
 
-        private bool OnHasImpact()
-        {
-            return _isPerfect;
-        }
-
         private void OnResetPerfectState()
         {
-            _isPerfect = true;
+            entryController.ResetEntryState();
         }
     }
 }

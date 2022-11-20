@@ -1,7 +1,8 @@
 ﻿using Managers;
+using Signals;
 using UnityEngine;
 
-namespace Controllers
+namespace Controllers.Hoop
 {
     public class HoopImpactController : MonoBehaviour
     {
@@ -19,6 +20,7 @@ namespace Controllers
         {
             if (other.CompareTag("Player"))
             {
+                CoreGameSignals.Instance.onHasImpact?.Invoke();
                 manager.PlayImpactEffect();
             }
         }

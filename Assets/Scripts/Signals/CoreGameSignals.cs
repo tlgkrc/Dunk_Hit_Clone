@@ -12,6 +12,7 @@ namespace Signals
         public UnityAction onGameFailed = delegate {  };
         public UnityAction<bool> onInteractionWithBorder = delegate{  };
         public UnityAction<bool> onInteractionWithHookEntry = delegate {  };
-        public Func<bool> onHasImpact = delegate { return false;};
+        public UnityAction<bool> onInteractionWithHookExit = delegate {  };
+        public UnityAction onHasImpact = delegate { };
     }
 }

@@ -2,7 +2,7 @@
 using Signals;
 using UnityEngine;
 
-namespace Controllers
+namespace Controllers.Hoop
 {
     public class HoopEntryController : MonoBehaviour
     {
@@ -24,12 +24,9 @@ namespace Controllers
             }
         }
 
-        private void OnTriggerExit(Collider other)
+        public void ResetEntryState()
         {
-            if (other.CompareTag("Player"))
-            {
-                CoreGameSignals.Instance.onInteractionWithHookEntry?.Invoke(false);
-            }
+            CoreGameSignals.Instance.onInteractionWithHookEntry?.Invoke(false);
         }
     }
 }

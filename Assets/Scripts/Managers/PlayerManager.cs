@@ -48,6 +48,7 @@ namespace Managers
             CoreGameSignals.Instance.onReset += OnReset;
             CoreGameSignals.Instance.onInteractionWithBorder += OnInteractionWithBorder;
             CoreGameSignals.Instance.onInteractionWithHookEntry += OnInteractionWithEntry;
+            CoreGameSignals.Instance.onInteractionWithHookExit += OnInteractionWithHookExit;
             ScoreSignals.Instance.onGetPecfectCount += OnGetPerfectCount;
             ScoreSignals.Instance.onUpdateScore += OnChangeMoveDirection;
         }
@@ -60,6 +61,7 @@ namespace Managers
             CoreGameSignals.Instance.onReset -= OnReset;
             CoreGameSignals.Instance.onInteractionWithBorder -= OnInteractionWithBorder;
             CoreGameSignals.Instance.onInteractionWithHookEntry -= OnInteractionWithEntry;
+            CoreGameSignals.Instance.onInteractionWithHookExit -= OnInteractionWithHookExit;
             ScoreSignals.Instance.onUpdateScore -= OnChangeMoveDirection;
             ScoreSignals.Instance.onGetPecfectCount -= OnGetPerfectCount;
         }
@@ -89,6 +91,7 @@ namespace Managers
         }
         private void OnReset()
         {
+            movementController.StopPlayer();
         }
 
         private void OnActivateMovement()
@@ -109,17 +112,16 @@ namespace Managers
         private void OnInteractionWithBorder(bool isLeft)
         {
             movementController.ReturnLoopPos(isLeft);
-            SendMoveDirectionToController();
         }
 
         private void OnInteractionWithEntry(bool isInEntry)
         {
             physicsController.SetEntrySituation(isInEntry);
         }
-
-        private void SendMoveDirectionToController()
+        
+        private void OnInteractionWithHookExit(bool isInExit)
         {
-            particleController.SetDirection(movementController.GetMoveDirection());
+            physicsController.SetExitSituation(isInExit);
         }
 
         private void OnGetPerfectCount(ushort count)

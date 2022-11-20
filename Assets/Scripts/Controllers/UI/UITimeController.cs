@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Controllers
+namespace Controllers.UI
 {
     public class UITimeController : MonoBehaviour
     {
@@ -15,6 +15,7 @@ namespace Controllers
 
         [SerializeField] private TextMeshProUGUI timeText;
         [SerializeField] private Image remainingTimeRatioImage;
+        [SerializeField] private Image timeBackground;
 
         #endregion
 
@@ -22,7 +23,7 @@ namespace Controllers
 
         private bool _changedColor;
         private float _currentTime;
-        private const float _timeBorder = 70;
+        private const float _timeBorder = 30;
 
         #endregion
         
@@ -65,7 +66,7 @@ namespace Controllers
             remainingTimeRatioImage.fillAmount = _currentTime / _timeBorder;
             if ((_currentTime/_timeBorder)<.5f && !_changedColor)
             {
-                remainingTimeRatioImage.color = new Color(255, 52, 84, 255);
+                remainingTimeRatioImage.color = new Color(220, 0, 24, 255);
                 _changedColor = true;
                 StartCoroutine(TimeScaleAnim());
             }
@@ -82,9 +83,11 @@ namespace Controllers
         {
             while ((_currentTime/_timeBorder)<.5f)
             {
-                remainingTimeRatioImage.transform.DOScale(1.2f, 1.2f).SetEase(Ease.OutElastic).OnComplete(()
-                    => remainingTimeRatioImage.transform.DOScale(1, .8f));
-                yield return new WaitForSeconds(2f);
+                remainingTimeRatioImage.transform.DOScale(1.1f, 0.6f).SetEase(Ease.OutElastic).OnComplete(()
+                    => remainingTimeRatioImage.transform.DOScale(1, .4f));
+                timeBackground.transform.DOScale(1.1f, 0.6f).SetEase(Ease.OutElastic).OnComplete(()
+                    => timeBackground.transform.DOScale(1, .4f));
+                yield return new WaitForSeconds(1f);
             }
         }
     }

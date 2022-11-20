@@ -1,5 +1,4 @@
-﻿using System;
-using Data.ValueObject;
+﻿using Data.ValueObject;
 using UnityEngine;
 
 namespace Controllers.Player
@@ -62,11 +61,11 @@ namespace Controllers.Player
         {
             if (_isMoveRightSide)
             {
-                rigidbody.AddForce(new Vector3(_playerData.AppliedForce.x,_playerData.AppliedForce.y,0),ForceMode.Impulse);
+                rigidbody.AddForce(new Vector3(_playerData.AppliedForce.x,_playerData.AppliedForce.y,0),ForceMode.Force);
             }
             else
             {
-                rigidbody.AddForce(new Vector3(-_playerData.AppliedForce.x,_playerData.AppliedForce.y,0),ForceMode.Impulse);
+                rigidbody.AddForce(new Vector3(-_playerData.AppliedForce.x,_playerData.AppliedForce.y,0),ForceMode.Force);
             }
         }
 
@@ -89,6 +88,12 @@ namespace Controllers.Player
         public bool GetMoveDirection()
         {
             return _isMoveRightSide;
+        }
+
+        public void StopPlayer()
+        {
+            rigidbody.velocity =Vector3.zero;
+            rigidbody.angularVelocity = Vector3.zero;
         }
     }
 }

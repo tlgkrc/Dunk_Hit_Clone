@@ -1,4 +1,8 @@
-﻿using Managers;
+﻿using System.Collections;
+using System.Collections.Generic;
+using Enums;
+using Managers;
+using Signals;
 using UnityEngine;
 
 namespace Controllers.Player
@@ -8,55 +12,51 @@ namespace Controllers.Player
         #region Self Variables
 
         #region Serialized Variables
-
-        [SerializeField] private GameObject effect;
+        
         [SerializeField] private PlayerManager manager;
 
         #endregion
 
         #region Private Variables
 
-        private ParticleSystem _particle;
+        private List<GameObject> particleGamobjects = new List<GameObject>();
 
         #endregion
 
         #endregion
-
-        private void Awake()
-        {
-            _particle = effect.GetComponent<ParticleSystem>();
-        }
-
-        public void SetDirection(bool isRight)
-        {
-            SetParticlePosition(isRight);
-        }
 
         public void SetPerfectCount(ushort count)
         {
-            if (count>=3)
+            if (count>3)
             {
-                effect.SetActive(true);
-                _particle.Play();
+                StartCoroutine(CreateParticles());
             }
             else
             {
-                _particle.Stop();
-                effect.SetActive(false);
+                StopAllCoroutines();
+                ClearParticles();
             }
         }
 
-        private void SetParticlePosition(bool isRight)
+        private IEnumerator CreateParticles()
         {
-            if (isRight == true) 
-            {
-                effect.transform.position  = manager.transform.position - new Vector3(0, 0, -.5f);
-            }
-            else
-            {
-                effect.transform.position = manager.transform.position - new Vector3(0, .3f, -.5f);
-            }
+            var particleGameObject =
+                PoolSignals.Instance.onGetPoolObject?.Invoke(PoolTypes.PerfectParticle.ToString(), transform);
+            particleGamobjects.Add(particleGameObject);
+            particleGameObject.transform.position = manager.transform.position;
+            var particle = particleGameObject.GetComponent<ParticleSystem>();
+            particle.Play();
+            yield return new WaitForSeconds(.25f);
+            particle.Stop();
+            StartCoroutine(CreateParticles());
         }
 
+        private void ClearParticles()
+        {
+            foreach (var element in particleGamobjects)
+            {
+                PoolSignals.Instance.onReleasePoolObject?.Invoke(PoolTypes.PerfectParticle.ToString(), element);
+            }
+        }
     }
 }

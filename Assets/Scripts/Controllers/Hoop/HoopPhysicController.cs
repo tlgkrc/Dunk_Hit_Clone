@@ -1,10 +1,8 @@
-﻿using System;
-using Data.ValueObject;
-using Managers;
+﻿using Managers;
 using Signals;
 using UnityEngine;
 
-namespace Controllers
+namespace Controllers.Hoop
 {
     public class HoopPhysicController : MonoBehaviour
     {
@@ -21,5 +19,6 @@ namespace Controllers
         #endregion
 
         #endregion
+        
     }
 }

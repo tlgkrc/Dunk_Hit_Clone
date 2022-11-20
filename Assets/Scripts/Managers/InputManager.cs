@@ -18,13 +18,13 @@ namespace Managers
 
         #region Serialized Variables
 
-        [SerializeField] private bool isReadyForTouch, isFirstTimeTouchTaken;
 
         #endregion
 
         #region Private Variables
 
-        private bool _isTouching;
+        private bool _isReadyForTouch; 
+        private bool _isFirstTimeTouchTaken;
         private float _currentVelocity; //ref type
         private Vector2? _mousePosition; //ref type
         private Vector3 _moveVector; //ref type
@@ -79,7 +79,7 @@ namespace Managers
 
         private void Update()
         {
-            if (!isReadyForTouch) return;
+            if (!_isReadyForTouch) return;
             
             if (Input.GetMouseButtonUp(0) && !_queryPointerOverUIElementCommand.Execute())
             {
@@ -96,24 +96,23 @@ namespace Managers
         
         private void OnEnableInput()
         {
-            isReadyForTouch = true;
+            _isReadyForTouch = true;
         }
         
         private void OnDisableInput()
         {
-            isReadyForTouch = false;
+            _isReadyForTouch = false;
         }
         
         private void OnPlay()
         {
-            isReadyForTouch = true;
+            _isReadyForTouch = true;
         }
 
         private void OnReset()
         {
-            _isTouching = false;
-            isReadyForTouch = false;
-            isFirstTimeTouchTaken = false;
+            _isReadyForTouch = false;
+            _isFirstTimeTouchTaken = false;
         }
 
         #endregion
@@ -122,17 +121,15 @@ namespace Managers
 
         private void MouseButtonUp()
         {
-            _isTouching = false;
             InputSignals.Instance.onInputReleased?.Invoke();
         }
 
         private void MouseButtonDown()
         {
-            _isTouching = true;
             InputSignals.Instance.onInputTaken?.Invoke();
-            if (!isFirstTimeTouchTaken)
+            if (!_isFirstTimeTouchTaken)
             {
-                isFirstTimeTouchTaken = true;
+                _isFirstTimeTouchTaken = true;
                 InputSignals.Instance.onFirstTimeTouchTaken?.Invoke();
             }
             _mousePosition = Input.mousePosition;
