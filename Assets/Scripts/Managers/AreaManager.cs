@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Controllers;
-using Controllers.Player;
-using Enums;
-using Signals;
+﻿using Controllers;
 using UnityEngine;
 
 namespace Managers

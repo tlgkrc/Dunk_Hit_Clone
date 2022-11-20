@@ -18,6 +18,7 @@ namespace Managers
         #region Private Variables
 
         private ushort _score;
+        private ushort _bestScore;
         private ushort _perfectCounter;
         private Vector3 _greatTextPos;
 
@@ -37,6 +38,7 @@ namespace Managers
             ScoreSignals.Instance.onUpdateScore += OnUpdateScore;
             ScoreSignals.Instance.onGetHookPos += OnGetHookPosition;
             CoreGameSignals.Instance.onPlay += OnPlay;
+            CoreGameSignals.Instance.onGameFailed += OnGameFailed;
         }
 
         private void UnsubscribeEvents()
@@ -44,6 +46,7 @@ namespace Managers
             ScoreSignals.Instance.onUpdateScore -= OnUpdateScore;
             ScoreSignals.Instance.onGetHookPos -= OnGetHookPosition;
             CoreGameSignals.Instance.onPlay -= OnPlay;
+            CoreGameSignals.Instance.onGameFailed -= OnGameFailed;
         }
 
         private void OnDisable()
@@ -56,6 +59,7 @@ namespace Managers
         private void OnPlay()
         {
             greatText.gameObject.SetActive(false);
+            UISignals.Instance.onSetScoreText?.Invoke(_score,_perfectCounter);
         }
 
         private void OnUpdateScore()
@@ -69,7 +73,6 @@ namespace Managers
                 greatText.text = "GREAT\n+" + _perfectCounter.ToString();
                 greatText.transform.DOMoveY(greatText.transform.position.y + 3f, 1.2f).
                     OnComplete(ResetGreatText);
-                Debug.Log("Implement boost effect");
             }
             else
             {
@@ -78,6 +81,7 @@ namespace Managers
 
             _score += (ushort)(_perfectCounter+1);
             UISignals.Instance.onSetScoreText?.Invoke(_score,_perfectCounter);
+            ScoreSignals.Instance.onGetPecfectCount?.Invoke((ushort)(_perfectCounter+1));
         }
 
         private void OnGetHookPosition(Vector3 hookPos)
@@ -88,6 +92,14 @@ namespace Managers
         private void ResetGreatText()
         {
             greatText.gameObject.SetActive(false);
+        }
+
+        private void OnGameFailed()
+        {
+            ushort oldScore = SaveManager.LoadValue("BestScore", _score);
+            if (oldScore >= _score) return;
+            SaveManager.SaveValue("BestScore",_score);
+            UISignals.Instance.onSetBestScore?.Invoke(_score);
         }
     }
 }

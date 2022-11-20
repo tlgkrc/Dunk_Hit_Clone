@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Controllers;
-using DG.Tweening;
+﻿using DG.Tweening;
 using Signals;
 using UnityEngine;
 

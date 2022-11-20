@@ -1,9 +1,6 @@
-using System;
 using Commands;
 using Data.UnityObject;
 using Data.ValueObject;
-using Enums;
-using Keys;
 using Signals;
 using UnityEngine;
 
@@ -93,7 +90,6 @@ namespace Managers
             {
                 MouseButtonDown();
             }
-            
         }
 
         #region Event Methods

@@ -21,7 +21,7 @@ namespace Managers
         [SerializeField] private PlayerMeshController meshController;
         [SerializeField] private PlayerPhysicsController physicsController;
         [SerializeField] private PlayerMovementController movementController;
-        //[SerializeField] private PlayerParticuleController particuleController;
+        [SerializeField] private PlayerParticleController particleController;
 
         #endregion
         
@@ -46,9 +46,10 @@ namespace Managers
             InputSignals.Instance.onInputReleased += OnDeactivateMovement;
             CoreGameSignals.Instance.onPlay += OnPlay;
             CoreGameSignals.Instance.onReset += OnReset;
-            ScoreSignals.Instance.onUpdateScore += OnChangeMoveDirection;
             CoreGameSignals.Instance.onInteractionWithBorder += OnInteractionWithBorder;
             CoreGameSignals.Instance.onInteractionWithHookEntry += OnInteractionWithEntry;
+            ScoreSignals.Instance.onGetPecfectCount += OnGetPerfectCount;
+            ScoreSignals.Instance.onUpdateScore += OnChangeMoveDirection;
         }
 
         private void UnsubscribeEvents()
@@ -57,9 +58,10 @@ namespace Managers
             InputSignals.Instance.onInputReleased -= OnDeactivateMovement;
             CoreGameSignals.Instance.onPlay -= OnPlay;
             CoreGameSignals.Instance.onReset -= OnReset;
-            ScoreSignals.Instance.onUpdateScore -= OnChangeMoveDirection;
             CoreGameSignals.Instance.onInteractionWithBorder -= OnInteractionWithBorder;
             CoreGameSignals.Instance.onInteractionWithHookEntry -= OnInteractionWithEntry;
+            ScoreSignals.Instance.onUpdateScore -= OnChangeMoveDirection;
+            ScoreSignals.Instance.onGetPecfectCount -= OnGetPerfectCount;
         }
 
         private void OnDisable()
@@ -107,6 +109,7 @@ namespace Managers
         private void OnInteractionWithBorder(bool isLeft)
         {
             movementController.ReturnLoopPos(isLeft);
+            SendMoveDirectionToController();
         }
 
         private void OnInteractionWithEntry(bool isInEntry)
@@ -114,16 +117,14 @@ namespace Managers
             physicsController.SetEntrySituation(isInEntry);
         }
 
-        // private void ParticuleState(bool active, Transform instantiateTransform = null)
-        // {
-        //     if (active)
-        //     {
-        //         particuleController.StartParticule(instantiateTransform);
-        //     }
-        //     else
-        //     {
-        //         particuleController.StopParticule();
-        //     }
-        // }
+        private void SendMoveDirectionToController()
+        {
+            particleController.SetDirection(movementController.GetMoveDirection());
+        }
+
+        private void OnGetPerfectCount(ushort count)
+        {
+            particleController.SetPerfectCount(count);
+        }
     }
 }

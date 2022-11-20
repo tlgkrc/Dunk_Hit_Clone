@@ -12,10 +12,10 @@ namespace Managers
 
         #region Serialized Variables
 
+        [SerializeField] private GameObject hoopEntry;
         [SerializeField] private HoopPhysicController physicController;
         [SerializeField] private HoopImpactController impactController;
-        [SerializeField] private GameObject hoopEntry;
-
+        
         #endregion
 
         #region Private Variables

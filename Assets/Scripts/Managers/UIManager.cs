@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Controllers;
 using DG.Tweening;
@@ -15,24 +14,20 @@ namespace Managers
         #region Self Variables
 
         #region Serialized Variables
-        [SerializeField] private List<GameObject> panels;
+        
         [SerializeField] private Text scoreText;
+        [SerializeField] private TextMeshProUGUI bestScore;
         [SerializeField] private TextMeshProUGUI increaseText;
         [SerializeField] private TextMeshProUGUI perfectText;
-        [SerializeField] private TextMeshProUGUI timeText;
-        [SerializeField] private Image remainingTimeRatioImage;
-        
-        
-        
+        [SerializeField] private List<GameObject> panels;
+        [SerializeField] private UITimeController timeController;
+
         #endregion
 
         #region Private Variables
         
         private UIPanelController _uiPanelController;
-        private float _currentTime;
-        private const float _timeBorder = 70;
-        private bool _changedColor = false;
-
+        
         #endregion
 
         #endregion
@@ -52,17 +47,21 @@ namespace Managers
         private void SubscribeEvents()
         {
             CoreGameSignals.Instance.onPlay += OnPlay;
+            CoreGameSignals.Instance.onGameFailed += OnGameFailed;
             UISignals.Instance.onOpenPanel += OnOpenPanel;
             UISignals.Instance.onClosePanel += OnClosePanel;
             UISignals.Instance.onSetScoreText += OnSetScoreText;
+            UISignals.Instance.onSetBestScore += OnSetBestScore;
         }
 
         private void UnsubscribeEvents()
         {
             CoreGameSignals.Instance.onPlay -= OnPlay;
+            CoreGameSignals.Instance.onGameFailed -= OnGameFailed;
             UISignals.Instance.onOpenPanel -= OnOpenPanel;
             UISignals.Instance.onClosePanel -= OnClosePanel;
             UISignals.Instance.onSetScoreText -= OnSetScoreText;
+            UISignals.Instance.onSetBestScore -= OnSetBestScore;
         }
 
         private void OnDisable()
@@ -71,11 +70,6 @@ namespace Managers
         }
 
         #endregion
-
-        private void Update()
-        {
-            SetTimer();
-        }
 
         private void OnOpenPanel(UIPanels panelParam)
         {
@@ -89,14 +83,14 @@ namespace Managers
 
         private void OnPlay()
         {
-            UISignals.Instance.onClosePanel?.Invoke(UIPanels.StartPanel);
-            UISignals.Instance.onOpenPanel?.Invoke(UIPanels.LevelPanel);
             perfectText.gameObject.SetActive(false);
             increaseText.gameObject.SetActive(false);
-            _currentTime = _timeBorder;
+            timeController.ResetTime();
+            UISignals.Instance.onClosePanel?.Invoke(UIPanels.StartPanel);
+            UISignals.Instance.onOpenPanel?.Invoke(UIPanels.LevelPanel);
         }
 
-        private void OnLevelFailed()
+        private void OnGameFailed()
         {
             UISignals.Instance.onClosePanel?.Invoke(UIPanels.LevelPanel);
             UISignals.Instance.onOpenPanel?.Invoke(UIPanels.FailPanel);
@@ -105,14 +99,12 @@ namespace Managers
         public void Play()
         {
             CoreGameSignals.Instance.onPlay?.Invoke();
-            OnPlay();
         }
 
         private void OnSetScoreText(ushort score,ushort increaseFactor)
         {
-            _currentTime = _timeBorder;
+            timeController.ResetTime();
             var isPerfect = CoreGameSignals.Instance.onHasImpact?.Invoke();
-            
             scoreText.transform.DOScale(Vector3.one * 1.3f, .3f).SetEase(Ease.InOutElastic).OnComplete(
                 () => scoreText.transform.DOScale(Vector3.one, .3f));
             scoreText.text = score.ToString();
@@ -138,35 +130,9 @@ namespace Managers
             increaseText.transform.DOLocalMoveY(increaseText.transform.localPosition.y - 140f, .3f);
         }
 
-        private void SetTimer()
+        private void OnSetBestScore(ushort best)
         {
-            if (_currentTime<=0)
-            {
-                _currentTime -= Time.deltaTime;
-                DisplayTimer(_currentTime);
-                SetRatioImage();
-            }
-            else
-            {
-                CoreGameSignals.Instance.onGameFailed?.Invoke();
-            }
-        }
-
-        private void DisplayTimer(float remainingTime)
-        {
-            float minutes = Mathf.FloorToInt(remainingTime / 60);  
-            float seconds = Mathf.FloorToInt(remainingTime % 60); 
-            timeText.text = $"{minutes:00}:{seconds:00}";
-        }
-        
-        private void SetRatioImage()
-        {
-            remainingTimeRatioImage.fillAmount = _currentTime / _timeBorder;
-            if (_currentTime/_timeBorder<.5f && !_changedColor)
-            {
-                remainingTimeRatioImage.material.color = new Color(255, 52, 84, 255);
-                _changedColor = true;
-            }
+            bestScore.text = "BEST " + best.ToString();
         }
     }
 }

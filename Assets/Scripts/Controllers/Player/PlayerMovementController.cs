@@ -24,7 +24,6 @@ namespace Controllers.Player
 
         #endregion
 
-
         private void Awake()
         {
             _isMoveRightSide = true;
@@ -85,6 +84,11 @@ namespace Controllers.Player
                 rigidbody.transform.position = new Vector3(pos.x - _playerData.LoopDistance,
                     pos.y, pos.z);
             }
+        }
+
+        public bool GetMoveDirection()
+        {
+            return _isMoveRightSide;
         }
     }
 }
