@@ -23,7 +23,7 @@ namespace Controllers.UI
 
         private bool _changedColor;
         private float _currentTime;
-        private const float _timeBorder = 30;
+        private const float _timeBorder = 15;
 
         #endregion
         
@@ -75,6 +75,7 @@ namespace Controllers.UI
         public void ResetTime()
         {
             _currentTime = _timeBorder;
+            _changedColor = false;
             StopAllCoroutines();
             remainingTimeRatioImage.color = new Color(0, 235, 255, 255);
         }

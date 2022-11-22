@@ -46,7 +46,7 @@ namespace Controllers.Player
             particleGameObject.transform.position = manager.transform.position;
             var particle = particleGameObject.GetComponent<ParticleSystem>();
             particle.Play();
-            yield return new WaitForSeconds(.25f);
+            yield return new WaitForSeconds(.2f);
             particle.Stop();
             StartCoroutine(CreateParticles());
         }

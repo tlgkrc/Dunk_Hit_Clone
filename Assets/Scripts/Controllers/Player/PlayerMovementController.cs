@@ -9,7 +9,7 @@ namespace Controllers.Player
 
         #region Serialized Variables
 
-        [SerializeField] private new Rigidbody rigidbody;
+        [SerializeField] private new Rigidbody rb;
 
         #endregion
 
@@ -17,6 +17,7 @@ namespace Controllers.Player
 
         private bool _isMoveRightSide;
         private bool _isSuitableForNewForce;
+        private const float _maxVelocityMagnitude = 4.5f;
         private PlayerData _playerData;
 
         #endregion
@@ -52,6 +53,7 @@ namespace Controllers.Player
 
         private void FixedUpdate()
         {
+            ClampVelocity();
             if (!_isSuitableForNewForce) return;
             ApplyForce();
             _isSuitableForNewForce = false;
@@ -61,11 +63,11 @@ namespace Controllers.Player
         {
             if (_isMoveRightSide)
             {
-                rigidbody.AddForce(new Vector3(_playerData.AppliedForce.x,_playerData.AppliedForce.y,0),ForceMode.Force);
+                rb.AddForce(new Vector3(_playerData.AppliedForce.x,_playerData.AppliedForce.y,0),ForceMode.Force);
             }
             else
             {
-                rigidbody.AddForce(new Vector3(-_playerData.AppliedForce.x,_playerData.AppliedForce.y,0),ForceMode.Force);
+                rb.AddForce(new Vector3(-_playerData.AppliedForce.x,_playerData.AppliedForce.y,0),ForceMode.Force);
             }
         }
 
@@ -75,12 +77,12 @@ namespace Controllers.Player
             if (isLeft)
             {
                 
-                rigidbody.transform.position = new Vector3(pos.x + _playerData.LoopDistance,
+                rb.transform.position = new Vector3(pos.x + _playerData.LoopDistance,
                     pos.y, pos.z);
             }
             else
             {
-                rigidbody.transform.position = new Vector3(pos.x - _playerData.LoopDistance,
+                rb.transform.position = new Vector3(pos.x - _playerData.LoopDistance,
                     pos.y, pos.z);
             }
         }
@@ -92,8 +94,16 @@ namespace Controllers.Player
 
         public void StopPlayer()
         {
-            rigidbody.velocity =Vector3.zero;
-            rigidbody.angularVelocity = Vector3.zero;
+            rb.velocity =Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+        }
+
+        private void ClampVelocity()
+        {
+            if (rb.velocity.magnitude>_maxVelocityMagnitude)
+            {
+                rb.velocity = Vector3.ClampMagnitude(rb.velocity, _maxVelocityMagnitude);
+            }
         }
     }
 }

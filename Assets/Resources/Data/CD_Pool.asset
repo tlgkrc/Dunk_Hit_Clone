@@ -16,5 +16,5 @@ MonoBehaviour:
     m_Keys: 00000000
     m_Values:
     - ObjectLimit: 10
-      PooledGameObject: {fileID: 1900756431413560, guid: 529eb4216865eba419c1a4a68d0b0388,
+      PooledGameObject: {fileID: 1724243991040466, guid: f3377962368b1df43ae045f46ddaf9cd,
         type: 3}
